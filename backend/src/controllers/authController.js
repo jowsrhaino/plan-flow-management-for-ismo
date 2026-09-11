@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { getJwtSecret } = require('../config/env');
 const { User, Project, Task } = require('../models');
 
 const createDefaultWorkspace = async (userId) => {
@@ -45,7 +46,7 @@ const register = async (req, res) => {
     await createDefaultWorkspace(newUser.id);
 
     // JWT Token உருவாக்குகிறோம்
-    const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_2026_planflow';
+    const secret = getJwtSecret();
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, fullName: newUser.fullName },
       secret,
@@ -92,7 +93,7 @@ const login = async (req, res) => {
     }
 
     // சரி எனில் JWT Token வழங்குகிறோம்
-    const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_2026_planflow';
+    const secret = getJwtSecret();
     // Existing accounts also receive the default workspace automatically on
     // their first successful login, without a manual "add sample" action.
     const existingProjectCount = await Project.count({ where: { userId: user.id } });

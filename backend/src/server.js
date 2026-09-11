@@ -13,6 +13,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const integrationRoutes = require('./routes/integrationRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/integrations', integrationRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Server Start & DB Sync
 const startServer = async () => {

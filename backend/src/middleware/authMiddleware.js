@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { getJwtSecret } = require('../config/env');
 
 // பாதுகாக்கப்பட்ட Routes-க்குச் செல்ல Token உள்ளதா எனச் சோதிக்கும் Middleware
 const authenticateJWT = (req, res, next) => {
@@ -18,7 +19,7 @@ const authenticateJWT = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_2026_planflow';
+    const secret = getJwtSecret();
     const decoded = jwt.verify(token, secret);
     
     // லாகின் செய்த பயனரின் தகவல்களை req.user-ல் வைக்கிறோம்
