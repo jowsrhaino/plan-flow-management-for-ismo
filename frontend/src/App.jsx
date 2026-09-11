@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import Tasks from './pages/Tasks';
+import Chatbot from './pages/Chatbot';
 import Team from './pages/Team';
 import Integrations from './pages/Integrations';
 
@@ -32,6 +33,7 @@ function App() {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/tasks" element={<Tasks />} />
+                      <Route path="/chatbot" element={<Chatbot />} />
                       <Route path="/team" element={<Team />} />
                       <Route path="/integrations" element={<Integrations />} />
                       <Route path="*" element={<Navigate to="/dashboard" replace />} />
