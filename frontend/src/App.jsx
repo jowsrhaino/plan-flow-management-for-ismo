@@ -33,12 +33,12 @@ function App() {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/tasks" element={<Tasks />} />
-                      <Route path="/chatbot" element={<Chatbot />} />
                       <Route path="/team" element={<Team />} />
                       <Route path="/integrations" element={<Integrations />} />
                       <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                   </main>
+                  <Chatbot />
                 </ProtectedRoute>
               }
             />

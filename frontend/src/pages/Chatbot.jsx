@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquareText, SendHorizonal, Sparkles, Bot, UserRound, Loader2 } from 'lucide-react';
+import { MessageSquareText, SendHorizonal, Sparkles, Bot, UserRound, Loader2, X } from 'lucide-react';
 import api from '../services/api';
 
 const initialBotMessage = {
@@ -11,6 +11,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([initialBotMessage]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,30 +36,28 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">AI assistant</p>
-          <h1 className="mt-2 text-3xl font-bold text-slate-900">PlanFlow Chatbot</h1>
-        </div>
-        <div className="flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-2 text-sm text-violet-700">
-          <Sparkles className="h-4 w-4" />
-          Workspace insights
-        </div>
-      </div>
-
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-600 text-white">
-            <Bot className="h-5 w-5" />
+    <>
+      {open && (
+        <section className="fixed bottom-24 right-4 z-50 flex h-[min(560px,calc(100vh-7rem))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:right-6" aria-label="PlanFlow Assistant">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-white">
+                <Bot className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="font-semibold text-slate-900">PlanFlow Assistant</div>
+                <div className="flex items-center gap-1 text-xs text-slate-500">
+                  <Sparkles className="h-3 w-3 text-violet-600" />
+                  Workspace insights
+                </div>
+              </div>
+            </div>
+            <button type="button" onClick={() => setOpen(false)} className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-200 hover:text-slate-900" aria-label="Close assistant">
+              <X className="h-4 w-4" />
+            </button>
           </div>
-          <div>
-            <div className="font-semibold text-slate-900">PlanFlow Assistant</div>
-            <div className="text-xs text-slate-500">Always ready with quick project insight</div>
-          </div>
-        </div>
 
-        <div className="h-[480px] space-y-4 overflow-y-auto bg-slate-50 p-5">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4">
           {messages.map((message, index) => (
             <div key={`${message.sender}-${index}`} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex max-w-[85%] items-start gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
@@ -80,26 +79,37 @@ const Chatbot = () => {
               </div>
             </div>
           )}
-        </div>
+          </div>
 
-        <form onSubmit={handleSubmit} className="flex gap-3 border-t border-slate-200 bg-white p-4">
+          <form onSubmit={handleSubmit} className="flex gap-2 border-t border-slate-200 bg-white p-3">
           <input
             type="text"
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder="Ask about tasks, projects, or project health..."
-            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none ring-0 transition focus:border-violet-400 focus:bg-white"
+            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none ring-0 transition focus:border-violet-400 focus:bg-white"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="inline-flex items-center justify-center rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <SendHorizonal className="h-4 w-4" />
           </button>
-        </form>
-      </div>
-    </div>
+          </form>
+        </section>
+      )}
+
+      <button
+        type="button"
+        onClick={() => setOpen((isOpen) => !isOpen)}
+        className="fixed bottom-5 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-600/30 transition hover:scale-105 hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200 sm:right-6"
+        aria-label={open ? 'Close assistant' : 'Open assistant'}
+        title={open ? 'Close assistant' : 'Open assistant'}
+      >
+        {open ? <X className="h-6 w-6" /> : <MessageSquareText className="h-6 w-6" />}
+      </button>
+    </>
   );
 };
 

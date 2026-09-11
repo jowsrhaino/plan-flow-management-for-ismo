@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, FolderKanban, CheckSquare, LogOut, Menu, X, User, UsersRound, PlugZap, MessageSquareText } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, CheckSquare, LogOut, Menu, X, User, UsersRound, PlugZap } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -18,7 +18,6 @@ const Navbar = () => {
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Projects', path: '/projects', icon: FolderKanban },
     { name: 'Tasks', path: '/tasks', icon: CheckSquare },
-    { name: 'Chatbot', path: '/chatbot', icon: MessageSquareText },
     { name: 'Team', path: '/team', icon: UsersRound },
     { name: 'Integrations', path: '/integrations', icon: PlugZap },
   ];
