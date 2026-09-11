@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-project_management_db}
+      MYSQL_USER: ${DB_USER:-planflow}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-planflow_dev_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DB_HOST: mysql
+      CLIENT_URL: http://localhost:8080
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports: ["5000:5000"]
+  frontend:
+    build: ./frontend
+    depends_on: [backend]
+    ports: ["8080:80"]
+volumes:
+  mysql_data:

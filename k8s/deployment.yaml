@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: planflow-api, namespace: planflow }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: planflow-api } }
+  template:
+    metadata: { labels: { app: planflow-api } }
+    spec:
+      containers:
+        - name: api
+          image: REGISTRY/planflow-api:IMAGE_TAG
+          ports: [{ containerPort: 5000 }]
+          envFrom: [{ secretRef: { name: planflow-secrets } }]
+          readinessProbe: { httpGet: { path: /api/health, port: 5000 }, initialDelaySeconds: 10 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: backend, namespace: planflow }
+spec: { selector: { app: planflow-api }, ports: [{ port: 5000, targetPort: 5000 }] }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: planflow-web, namespace: planflow }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: planflow-web } }
+  template:
+    metadata: { labels: { app: planflow-web } }
+    spec:
+      containers:
+        - name: web
+          image: REGISTRY/planflow-web:IMAGE_TAG
+          ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: planflow-web, namespace: planflow }
+spec: { type: LoadBalancer, selector: { app: planflow-web }, ports: [{ port: 80, targetPort: 80 }] }

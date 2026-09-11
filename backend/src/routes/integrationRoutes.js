@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/integrationController');
+const { authenticateJWT } = require('../middleware/authMiddleware');
+router.get('/github/callback', controller.githubCallback);
+router.use(authenticateJWT);
+router.post('/github/connect', controller.connectGitHub);
+router.get('/github/status', controller.getGitHubStatus);
+router.get('/github/repositories', controller.getRepositories);
+router.delete('/github', controller.disconnectGitHub);
+module.exports = router;
