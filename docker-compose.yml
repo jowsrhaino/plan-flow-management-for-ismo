@@ -6,6 +6,8 @@ services:
       MYSQL_USER: ${DB_USER:-planflow}
       MYSQL_PASSWORD: ${DB_PASSWORD:-planflow_dev_password}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+    ports:
+      - "3306:3306"
     volumes: [mysql_data:/var/lib/mysql]
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]

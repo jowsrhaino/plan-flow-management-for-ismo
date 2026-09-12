@@ -1,8 +1,15 @@
 import axios from 'axios';
 
+const rawBaseUrl = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const apiBaseUrl = rawBaseUrl
+  ? rawBaseUrl.endsWith('/api')
+    ? rawBaseUrl
+    : `${rawBaseUrl}/api`
+  : '/api';
+
 // API Instance உருவாக்கம்
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: apiBaseUrl,
   headers: {
     'Content-Type': 'application/json'
   }
